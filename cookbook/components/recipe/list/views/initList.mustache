@@ -1,0 +1,9 @@
+<h2>{{translations.title}}</h2>
+<ul id="recipeList">
+{{#each recipes}}
+   <li class="recipe" {{data 'recipe'}}>
+   <h3>{{name}} <a href='javascript://' class='destroy'>X</a></h3>
+   <p>{{description}}</p>
+   </li>
+{{/each recipes}}
+</ul>

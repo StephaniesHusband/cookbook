@@ -1,0 +1,15 @@
+{
+	"commonComponents": {
+      "required": "Field is required"
+	},
+   "listComponent": {
+      "title": "Recipes",
+      "confirmDel": "Are you sure you want to delete this recipe '%s'?"
+   },
+   "createComponent": {
+      "name": "Name",
+      "description": "Description",
+      "newRecipe": "New Recipe",
+      "create": "Create"
+   }
+}
