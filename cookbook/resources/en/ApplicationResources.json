@@ -10,6 +10,7 @@
       "name": "Name",
       "description": "Description",
       "newRecipe": "New Recipe",
-      "create": "Create"
+      "create": "Create",
+      "creating": "Creating..."
    }
 }

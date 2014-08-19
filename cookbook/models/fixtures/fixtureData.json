@@ -1,0 +1,14 @@
+[
+    {
+        "name": "Hamburger",
+        "description": "Beef, Bun, Cheese"
+    },
+    {
+        "name": "BLT",
+        "description": "Bacon, Lettuce & Tomato"
+    },
+    {
+        "name": "Meatloaf",
+        "description": "Beef, crescent rolls, Mushroom gravy"
+    }
+]

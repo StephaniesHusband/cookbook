@@ -15,8 +15,10 @@ steal(
             },
 
             init: function() {
+               // Change the default "required" error message
                can.Observe.validationMessages.presence = ResourceManager && ResourceManager.translations.commonComponents.required;
 
+               // Make sure we have a value for required fields
                this.validatePresenceOf(['name', 'description']);
             }
          },

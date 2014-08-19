@@ -1,14 +1,17 @@
-<h3>{{translations.newRecipe}}</h3>
-<p>
-   <label for='name'>{{translations.name}}</label> <br/>
-   <div id="name_err" class="error"></div>
-   <input type='input' name='name' id='name'/>
-</p>
-<p>
-   <div id="description_err" class="error"></div>
-   <label for='description'>{{translations.description}}</label><br/>
-   <textarea name='description' id='description'/></textarea>
-</p>
-<p>
-   <input type='submit' value='{{translations.create}}'/>
-</p>
+<input type="submit" class="button" value="{{translations.newRecipe}}">
+<div id="panelCreate" name="panelCreate">
+   <p>
+      <div id="name_err" class="error"></div>
+      <label for='name'>{{translations.name}}</label> <br/>
+      <input type='input' name='name' id='name'/>
+   </p>
+   <p>
+      <div id="description_err" class="error"></div>
+      <label for='description'>{{translations.description}}</label><br/>
+      <textarea name='description' id='description'/></textarea>
+   </p>
+   <p>
+      <input type='submit' value='{{translations.create}}'/>
+      <input type='reset' value='Cancel'/>
+   </p>
+</div>

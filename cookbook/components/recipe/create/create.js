@@ -23,7 +23,7 @@ steal(
 
             loadView: function() {
                var frag = initView({
-                  translations: ResourceManager.translations && ResourceManager.translations.createComponent,
+                  translations: ResourceManager.translations && ResourceManager.translations.createComponent
                });
 
                this.element.html(frag);
@@ -36,17 +36,21 @@ steal(
 
                if (!errors)
                {
-                  $element.find('[type=submit]').val('Creating...');
+                  $element.find('[type=submit]').val(ResourceManager.translations.createComponent.creating);
 
                   new Recipe(this.options.model.attr()).save(function() {
-                     $element.find('[type=submit]').val('Create');
+                     $element.find('[type=submit]').val(ResourceManager.translations.createComponent.create);
                      $element[0].reset();
 
                      // TODO why is this not clearing the model!!!!
-                     this.options.model = new CreateModel();
+                     //this.options.model = new CreateModel();
+
+                     $.each(this.options.model.attr, function(key, value) {
+                        this.options.model.attr(key, '');
+                     });
                   });
 
-                  $(".error").hide();
+                  $element.reset();
                }
                else
                {
@@ -57,10 +61,19 @@ steal(
                }
             },
 
+            reset: function($element, $event) {
+               $(".error").hide();
+               $("#panelCreate").slideUp();
+            },
+
             // Move any changes to the screen into the presentation
             // (createModel)
             'change': function($element, $event) {
                this.options.model.attr($element.formParams());
+            },
+
+            '.button click': function($element, $event) {
+               $("#panelCreate").slideDown();
             }
          }
       );
