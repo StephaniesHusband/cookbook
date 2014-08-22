@@ -1,9 +1,16 @@
 module.exports = function(grunt) {
 
 	var rewriteModule = require('http-rewrite-middleware');
+
+   var localhost = grunt.option("localhost") || "localhost";
+   var localhostPort = grunt.option("localhostPort") || "9001";
 	
 	// Project configuration.
 	grunt.initConfig({
+      options: {
+         "localhostPort": 9001
+      },
+
 	   pkg: grunt.file.readJSON('package.json'),
 
       concurrent: {
@@ -18,76 +25,80 @@ module.exports = function(grunt) {
 	   connect: {
 	    	server: {
 				options: {
-					port: 9001,
+					port: localhostPort,
 					keepalive: true,
 					livereload: true,
 					middleware: function (connect, options) {
-	                    // Setup the proxy
-	                    var middlewares = [require('grunt-connect-proxy/lib/utils').proxyRequest];
-	
-	                    // RewriteRules support
-	                    middlewares.push(rewriteModule.getMiddleware([
-	                      	//rewrite url for SSI includes on UI elements
-	                      	//{from: '^index.html$', to: '/.tmp/index.html'},
-	                      	{from: '^/cookbook/(.*).html$', to: '/.tmp/$1.html'}
-	                    ]));
-	
-	                    if (!Array.isArray(options.base)) {
-	                        options.base = [options.base];
-	                    }
-	
-	                    var directory = options.directory || options.base[options.base.length - 1];
-	                    options.base.forEach(function (base) {
-	                        // Serve static files.
-	                        middlewares.push(connect.static(base));
-	                    });
-	
-	                    // Make directory browse-able.
-	                    middlewares.push(connect.directory(directory));
-	
-	                    return middlewares;
-	                }
+                  // Setup the proxy
+                  var middlewares = [require('grunt-connect-proxy/lib/utils').proxyRequest];
+
+                  // RewriteRules support
+                  middlewares.push(rewriteModule.getMiddleware([
+                     //rewrite url for SSI includes on UI elements
+                     //{from: '^index.html$', to: '/.tmp/index.html'},
+                     {from: '^/cookbook/(.*).html$', to: '/.tmp/$1.html'}
+                  ]));
+
+                  if (!Array.isArray(options.base)) {
+                     options.base = [options.base];
+                  }
+
+                  var directory = options.directory || options.base[options.base.length - 1];
+                  options.base.forEach(function (base) {
+                     // Serve static files.
+                     middlewares.push(connect.static(base));
+                  });
+
+                  // Make directory browse-able.
+                  middlewares.push(connect.directory(directory));
+
+                  return middlewares;
+               }
 				},
 				proxies: [
-	                {
-	                    context: ['/templates', '/css', '/images'],
-	                    host: 'wwwtest.fedex.com',
-	                    port: 80,
-	                    https: false,
-	                    changeOrigin: false
-	                },
-	                {
-	                    context: ['/userCal', '/commonDataCal'],
-	                    host: 'wwwtest.fedex.com',
-	                    port: 443,
-	                    https: true,
-	                    changeOrigin: false
-	                }
-	            ]
+               {
+                  context: ['/templates', '/css', '/images'],
+                  host: 'wwwtest.fedex.com',
+                  port: 80,
+                  https: false,
+                  changeOrigin: false
+               },
+               {
+                  context: ['/userCal', '/commonDataCal'],
+                  host: 'wwwtest.fedex.com',
+                  port: 443,
+                  https: true,
+                  changeOrigin: false
+               }
+            ]
 	    	}
-	    },
-	    ssi: {
-		    options: {
+      },
+      // grunt-ssi: Compiles HTML with SSI into static HTML pages
+      ssi: {
+         options: {
 		      cache: 'all',
 		      baseDir: '.'
-		    },
-		    ui: {
-		    	files: [{
+         },
+         ui: {
+            files: [{
 			    	expand: true,
 			    	cwd: '.tmp',
-					src: ['index.html', 'development.html'],
+					src: ['*.html'],
 					dest: '.tmp/',
-					ext: '.html'
-		        }]
-		    }
+               ext: '.html'
+            }]
+         }
 		},
-	    replace: {
+
+      // grunt-text-replace: Replace text in files using strings, regexs or functions
+      replace: {
+         // Replace all occurrences of Akamai server (images.fedex.com) with localhost:9001 for local testing.
 			CDN: {
-				src: ['cookbook/index.html','cookbook/development.html'],
+				src: ['**/*.html'],
 				dest: '.tmp/',
 				replacements: [{
-	               from: 'images.fedex.com',
-	               to: 'localhost:9001'
+               from: 'images.fedex.com',
+               to: 'localhost:'+localhostPort
 				}]
 			}
 		},
