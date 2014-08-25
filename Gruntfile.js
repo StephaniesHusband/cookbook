@@ -1,18 +1,27 @@
 module.exports = function(grunt) {
 
+   // This module makes it possible to redirect (rewrite internally or redirect using HTTP 
+   // codes) User to the specific URL based on RegExp Rules. The designated successor of
+   // grunt-connect-rewrite.
 	var rewriteModule = require('http-rewrite-middleware');
-
    var localhost = grunt.option("localhost") || "localhost";
-   var localhostPort = grunt.option("localhostPort") || "9001";
 	
 	// Project configuration.
 	grunt.initConfig({
-      options: {
-         "localhostPort": 9001
-      },
+      //------------------------------
+      // Project configuration
+      //------------------------------
+      localhostPort: 9001,
 
+      // -------------------------------------------------------------------
+      // Get data from package.json and assign it to a pkg variable
+      // -------------------------------------------------------------------
 	   pkg: grunt.file.readJSON('package.json'),
 
+      // -------------------------------------------------------------------
+      // Task: concurrent
+      // https://github.com/sindresorhus/grunt-concurrent
+      // -------------------------------------------------------------------
       concurrent: {
          serve: {
             tasks: [ 'server', 'watch' ],
@@ -25,7 +34,7 @@ module.exports = function(grunt) {
 	   connect: {
 	    	server: {
 				options: {
-					port: localhostPort,
+					port: '<%= localhostPort %>',
 					keepalive: true,
 					livereload: true,
 					middleware: function (connect, options) {
@@ -36,9 +45,10 @@ module.exports = function(grunt) {
                   middlewares.push(rewriteModule.getMiddleware([
                      //rewrite url for SSI includes on UI elements
                      //{from: '^index.html$', to: '/.tmp/index.html'},
-                     {from: '^/cookbook/(.*).html$', to: '/.tmp/$1.html'}
-                  ]));
+                     {from: 'cookbook/(development|index).html', to: '.tmp/$1.html'}
+                  ], { verbose: true }));
 
+                  // make options.base an array if is not already.
                   if (!Array.isArray(options.base)) {
                      options.base = [options.base];
                   }
@@ -83,22 +93,25 @@ module.exports = function(grunt) {
             files: [{
 			    	expand: true,
 			    	cwd: '.tmp',
-					src: ['*.html'],
+					src: ['index.html', 'development.html'],
 					dest: '.tmp/',
                ext: '.html'
             }]
          }
 		},
 
-      // grunt-text-replace: Replace text in files using strings, regexs or functions
+      // ------------------------------------------------
+      // Task: find and replace things in the project.
+      // https://github.com/yoniholmes/grunt-text-replace
+      // ------------------------------------------------
       replace: {
          // Replace all occurrences of Akamai server (images.fedex.com) with localhost:9001 for local testing.
 			CDN: {
-				src: ['**/*.html'],
+				src: ['cookbook/index.html','cookbook/development.html', 'cookbook/**/test.html'],
 				dest: '.tmp/',
 				replacements: [{
                from: 'images.fedex.com',
-               to: 'localhost:'+localhostPort
+               to: 'localhost:<%= localhostPort %>'
 				}]
 			}
 		},
