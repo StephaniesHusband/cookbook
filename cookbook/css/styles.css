@@ -7,7 +7,7 @@
    display: none;
 }
 
-.button {
+input[type=button] {
   position: relative;
   vertical-align: top;
   height: 40px;
@@ -22,11 +22,14 @@
   -webkit-box-shadow: inset 0 -2px #80399d;
   box-shadow: inset 0 -2px #80399d;
 }
-.button:active {
+input[type=button]:active {
   top: 1px;
   outline: none;
   -webkit-box-shadow: none;
   box-shadow: none;
+}
+input[type=button]:hover {
+   color: black;
 }
 
 li {

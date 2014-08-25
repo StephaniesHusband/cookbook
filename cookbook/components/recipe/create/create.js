@@ -72,7 +72,7 @@ steal(
                this.options.model.attr($element.formParams());
             },
 
-            '.button click': function($element, $event) {
+            '#newRecipe click': function($element, $event) {
                $("#panelCreate").slideDown();
             }
          }
