@@ -5,7 +5,7 @@ steal(
    "cookbook/models/fixtures", 
 
    function( Recipe ) {
-      module("cookbook/models/recipe");
+      module("cookbook/models/service/recipe");
 
       test("findAll", function() {
          expect(4);

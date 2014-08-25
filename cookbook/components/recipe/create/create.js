@@ -50,7 +50,7 @@ steal(
                      });
                   });
 
-                  $element.reset();
+                  this.reset();
                }
                else
                {
