@@ -5,7 +5,7 @@ steal(
    'cookbook/common/resources.js',
 	'cookbook/models/fixtures', 
 	function (S, RecipeCreate, Recipe, ResourceManager, recipeStore ) {
-      module("cookbook/recipe/create", {
+      module("cookbook/components/recipe/create", {
          setup: function(){
             $("#qunit-test-area").append("<form id='create'></form>");
             new RecipeCreate("#create");
@@ -27,9 +27,9 @@ steal(
          
          Recipe.bind("created",function(ev, recipe) {
             ok(true, "Ice Water added");
-            equals(recipe.name, "Ice Water", "name set correctly");
-            equals(recipe.description, 
-               "Pour water in a glass. Add ice cubes.", 
+            equals(recipe.name, "Ice Water",
+               "name set correctly");
+            equals(recipe.description, "Pour water in a glass. Add ice cubes.", 
                "description set correctly");
             start();
             Recipe.unbind("created",arguments.callee);

@@ -4,7 +4,7 @@ steal(
 	'cookbook/models/service/recipe.js',
 	'cookbook/models/fixtures',
 	function(S, RecipeList, Recipe, recipeStore ) {
-      module("cookbook/recipe/list", { 
+      module("cookbook/components/recipe/list", { 
          setup: function() {
             $("#qunit-test-area").append("<div id='recipes'></div>");
 
@@ -48,17 +48,6 @@ steal(
             S('h3:last a').click();
 
             S("h3:contains('Ice Water')").missing("Ice Water Removed");
-         });
-      });
-
-      asyncTest("lists created recipes", function(){
-         new Recipe({
-            name: "Grilled Cheese",
-            description: "grill cheese in bread"
-         }).save(function() {
-            S("h3:contains('Grilled Cheese X')").exists("Lists created recipe");
-
-            start();
          });
       });
    }
